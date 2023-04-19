@@ -6,14 +6,12 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { DocumentReader } from '@regulaforensics/ionic-native-document-reader/ngx';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    HomePageRoutingModule
-  ],
-  declarations: [HomePage]
+  imports: [CommonModule, FormsModule, IonicModule, HomePageRoutingModule],
+  providers: [AndroidPermissions, DocumentReader],
+  declarations: [HomePage],
 })
 export class HomePageModule {}

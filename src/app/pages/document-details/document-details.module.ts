@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { DocumentDetailsPageRoutingModule } from './document-details-routing.module';
+import { DocumentReader } from '@regulaforensics/ionic-native-document-reader/ngx';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 
 import { DocumentDetailsPage } from './document-details.page';
 
@@ -13,8 +15,9 @@ import { DocumentDetailsPage } from './document-details.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    DocumentDetailsPageRoutingModule
+    DocumentDetailsPageRoutingModule,
   ],
-  declarations: [DocumentDetailsPage]
+  providers: [DocumentReader, AndroidPermissions],
+  declarations: [DocumentDetailsPage],
 })
 export class DocumentDetailsPageModule {}

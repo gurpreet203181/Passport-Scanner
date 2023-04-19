@@ -1,0 +1,46 @@
+ion-content {
+  .imgContainer {
+    img {
+      width: 100%;
+    }
+  }
+
+  ion-button {
+    --background: transparent;
+    --background-activated: transparent;
+    --color: #e59142;
+    --background-activated: #e59142;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: none;
+  }
+
+  .dataContainer {
+    margin-left: 1rem;
+
+    ion-item {
+      --background: transparent;
+    }
+    h4 {
+      color: #7f7f7f;
+      font-size: 1rem;
+    }
+
+    h5 {
+      color: #fafafa;
+      font-size: 1rem;
+    }
+  }
+
+  .rfidImg {
+    width: 40%;
+  }
+  .mrzString {
+    margin-top: 1rem;
+    padding: 1rem;
+    h5 {
+      color: #fafafa;
+      font-size: 1rem;
+    }
+  }
+}

@@ -1,3 +1,117 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button
+        [routerLink]="[ '/home' ]"
+        defaultHref="home"
+      ></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
-  <ion-label class="ion-text-wrap monospace"> {{mrzRawText}} </ion-label>
+  <ion-grid>
+    <!-- img -->
+    <ion-row class="imgContainer">
+      <ion-col size="12">
+        <img [src]="'data:image/jpeg;base64,'+data.base64Img" alt="mrz Img" />
+      </ion-col>
+    </ion-row>
+
+    <!-- buttons -->
+    <ion-row class="optionBtnContainer">
+      <ion-col class="ion-text-center" size="6">
+        <ion-button (click)="writeToClipboard()"> Copy Result </ion-button>
+      </ion-col>
+      <ion-col class="ion-text-center" size="6">
+        <ion-button (click)="saveImg()"> Save Image </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- data -->
+    <ion-row class="dataContainer">
+      <ion-col size="12">
+        <ion-item lines="none">
+          <!-- surname -->
+          <h4>Surname :</h4>
+          <h5>{{mrzDetails?.lastName}}</h5>
+        </ion-item>
+        <!-- Given Name -->
+        <ion-item lines="none">
+          <h4>Given Name :</h4>
+          <h5>{{mrzDetails?.firstName}}</h5>
+        </ion-item>
+        <!-- passport number -->
+        <ion-item lines="none">
+          <h4>Passport Number :</h4>
+          <h5>{{mrzDetails?.documentNumber}}</h5>
+        </ion-item>
+
+        <!-- Nationality -->
+        <ion-item lines="none">
+          <h4>Nationality :</h4>
+          <h5>{{mrzDetails?.nationality}}</h5>
+        </ion-item>
+
+        <!-- birthDate -->
+        <ion-item lines="none">
+          <h4>Date of Birth (YYY-MM-DD) :</h4>
+          <h5>{{mrzDetails?.birthDate}}</h5>
+        </ion-item>
+
+        <!-- GENDER -->
+        <ion-item lines="none">
+          <h4>Gender :</h4>
+          <h5>{{mrzDetails?.sex}}</h5>
+        </ion-item>
+
+        <!-- EXPIRY -->
+        <ion-item lines="none">
+          <h4>Date of Expiry (YYY-MM-DD) :</h4>
+          <h5>{{mrzDetails?.expirationDate}}</h5>
+        </ion-item>
+
+        <!-- mrz string -->
+        <div class="mrzString">
+          <h4>Mrz String :</h4>
+          <h5>{{mrzDetails?.mrzLines}}</h5>
+        </div>
+      </ion-col>
+    </ion-row>
+    <!-- Nfc scan -->
+    <ion-row *ngIf="!rfidData">
+      <ion-col class="ion-text-center" size="12">
+        <ion-button id="open-modal" (click)="openRFIDReader()">
+          NFC SCAN
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+    <!-- img -->
+    <ion-row *ngIf="rfidData">
+      <ion-col class="ion-text-center" size="12">
+        <img
+          [src]="'data:image/jpeg;base64,'+rfidData?.base64Portrait"
+          alt="mrz Img"
+          class="rfidImg"
+        />
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="dataContainer">
+      <ion-col size="12">
+        <ion-item *ngFor="let item of rfidData?.fields" lines="none">
+          <!-- surname -->
+          <h4>{{item?.fieldName}} :</h4>
+          <h5>{{item?.value}}</h5>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+
+    <!-- try agian button -->
+    <ion-row *ngIf="rfidData">
+      <ion-col class="ion-text-center" size="12">
+        <ion-button (click)="openRFIDReader()"> Try again </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
