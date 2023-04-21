@@ -14,11 +14,10 @@ import {
   DocumentReaderCompletion,
 } from '@regulaforensics/ionic-native-document-reader/ngx';
 import { Clipboard } from '@capacitor/clipboard';
-import { Subject, Subscription } from 'rxjs';
-import { Platform, ToastController, isPlatform } from '@ionic/angular';
+import {  Subscription } from 'rxjs';
+import { Platform, ToastController } from '@ionic/angular';
 import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
 import { AlertController } from '@ionic/angular';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
 import { Media, MediaSaveOptions } from '@capacitor-community/media';
 
@@ -217,6 +216,3 @@ export class DocumentDetailsPage implements OnInit {
   }
 }
 
-/**TODO:
- * only passport document can be scanned
- */
