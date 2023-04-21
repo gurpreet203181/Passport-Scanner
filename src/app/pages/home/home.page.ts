@@ -119,7 +119,7 @@ export class HomePage implements OnInit {
         );
         console.log(result);
 
-        if (documentType.value == 'P') {
+       // if (documentType.value == 'P') {
           result.map((field: any) => {
             switch (field.fieldName) {
               case 'Surname':
@@ -173,7 +173,7 @@ export class HomePage implements OnInit {
           this.service.scannedData.next(dataObject);
           /* Navigating to the document-details page. */
           this.route.navigate(['document-details']);
-        }
+        //}
       } else {
         this.presentToast();
       }

@@ -1,11 +1,7 @@
 <ion-content [fullscreen]="true">
   <div id="container">
-    <ng-container *ngIf="initialized; else elseTemplate">
       <ion-button (click)="scanMRZCode()"> MRZ SCAN </ion-button>
-    </ng-container>
-    <ng-template #elseTemplate>
-      <ion-progress-bar type="indeterminate"></ion-progress-bar>
-      <p color="secondary">Initializing....</p>
-    </ng-template>
+      <!-- <ion-progress-bar type="indeterminate"></ion-progress-bar>
+      <p color="secondary">Initializing....</p> -->
   </div>
 </ion-content>
