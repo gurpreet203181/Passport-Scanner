@@ -37,6 +37,7 @@
     "@regulaforensics/cordova-plugin-document-reader-api": "^6.7.4",
     "@regulaforensics/cordova-plugin-document-reader-core-fullrfid": "^6.7.0",
     "@regulaforensics/ionic-native-document-reader": "^6.7.1",
+    "cordova-plugin-android-permissions": "^1.1.5",
     "ionicons": "^6.0.3",
     "rxjs": "^7.4.0",
     "tslib": "^2.3.0",

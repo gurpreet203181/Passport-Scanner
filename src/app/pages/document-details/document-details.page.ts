@@ -66,7 +66,8 @@ export class DocumentDetailsPage implements OnInit {
   }
 
   openRFIDReader() {
-    this.androidPermissions
+    if(Capacitor.getPlatform() === 'android') {
+      this.androidPermissions
       .checkPermission(this.androidPermissions.PERMISSION.NFC)
       .then(
         (result) => {
@@ -96,6 +97,11 @@ export class DocumentDetailsPage implements OnInit {
             });
         }
       );
+    }
+    else{
+      this.startRfidReader();
+    }
+   
   }
   /**
    * It opens the RFID reader and prints the data to the screen.
