@@ -69,26 +69,35 @@ export class HomePage implements OnInit {
      * base64 string
      */
     async function readFile(callback: any) {
-      var reader = new FileReader();
+      var reader = getFileReader();
 
       //get blob from local file
-      let blob = await fetch('./assets/regula.license').then((r) => r.blob());
-
+      let blob = await fetch('./../../assets/regula.license').then((r) => r.blob());
+      console.log(blob,'blob')
       const realFileReader = (reader as any)._realReader;
-      realFileReader.readAsDataURL(blob);
-
-      realFileReader.onloadend = (e: any) => {
-        var data = e.target.result;
-        data = data.substring(data.indexOf(',') + 1);
-
-        callback(data);
-      };
-      realFileReader.onerror = function (error: any) {
-        console.log(error);
-        console.log('reader fail');
-      };
+      reader?.readAsDataURL(blob);
+      if(blob){
+        reader.onloadend = (e: any) => {
+          var data = e.target.result;
+          data = data.substring(data.indexOf(',') + 1);
+  
+          callback(data);
+        };
+        reader.onerror = function (error: any) {
+          console.log(error);
+          console.log('reader fail');
+        };
+      }
+    
     }
+
+     function getFileReader(): FileReader {
+      const fileReader = new FileReader();
+      const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+      return zoneOriginalInstance || fileReader;
   }
+  }
+
   async onInitialized() {
     await this.documentReader.setConfig({
       processParams: {

@@ -33,6 +33,7 @@
     "@capacitor/keyboard": "4.1.1",
     "@capacitor/status-bar": "4.1.1",
     "@ionic/angular": "^6.1.9",
+    "@jcesarmobile/ssl-skip": "0.2.0",
     "@regulaforensics/cordova-plugin-document-reader-api": "^6.7.4",
     "@regulaforensics/cordova-plugin-document-reader-core-fullrfid": "^6.7.0",
     "@regulaforensics/ionic-native-document-reader": "^6.7.1",
