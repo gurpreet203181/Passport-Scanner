@@ -15,6 +15,7 @@ import {
   ScenarioIdentifier,
 } from '@regulaforensics/ionic-native-document-reader/ngx';
 import { ScannerServiceService } from 'src/app/services/scanner-service.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -88,7 +89,6 @@ export class HomePage implements OnInit {
           console.log('reader fail');
         };
       }
-    
     }
 
      function getFileReader(): FileReader {
@@ -111,82 +111,107 @@ export class HomePage implements OnInit {
    * The function scanMRZCode() is called when the user clicks on the button with the text "Scan MRZ
    * Code" on the home page. The function then navigates to the scanner page
    */
+   getFileReader2(): FileReader {
+    const fileReader = new FileReader();
+    const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
+    return zoneOriginalInstance || fileReader;
+}
+
   async scanMRZCode() {
     let data: any;
-
-    this.documentReader.showScanner().subscribe((m) => {
-      /* Converting the JSON string to a JSON object and then converting the JSON object to a
-      DocumentReaderCompletion object. */
-      data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
-      if (data != undefined) {
-        let dataFields: any = {};
-
-        const result = data?.textResult?.fields;
-        console.log(result);
-        const documentType = result.find(
-          (field: any) => field.fieldName == 'Document class code'
-        );
-        console.log(result);
-
-       // if (documentType.value == 'P') {
-          result.map((field: any) => {
-            switch (field.fieldName) {
-              case 'Surname':
-                dataFields['lastName'] = field.value;
-
-                break;
-              case 'Given name':
-                dataFields['firstName'] = field.value;
-
-                break;
-              case 'Document number':
-                dataFields['documentNumber'] = field.value;
-
-                break;
-              case 'Nationality code':
-                dataFields['nationality'] = field.value;
-
-                break;
-              case 'Date of birth':
-                dataFields['birthDate'] = field.value;
-
-                break;
-              case 'Sex':
-                if (field.value == 'M') {
-                  dataFields['sex'] = 'MALE';
-                } else if (field.value == 'F') {
-                  dataFields['sex'] = 'FEMALE';
-                } else dataFields['sex'] = 'X';
-
-                break;
-              case 'Date of expiry':
-                dataFields['expirationDate'] = field.value;
-
-                break;
-              case 'MRZ lines':
-                dataFields['mrzLines'] = field.value.replaceAll('^', '\n');
-
-                break;
-              default:
-                break;
-            }
-          });
-
-          let dataObject = {
-            data: dataFields,
-            base64Img: data?.graphicResult?.fields
-              ? data.graphicResult.fields[0].value
-              : null,
-          };
-          /* A service that is used to pass data between pages. */
-          this.service.scannedData.next(dataObject);
-          /* Navigating to the document-details page. */
-          this.route.navigate(['document-details']);
-        //}
-      } else {
-        this.presentToast();
-      }
+    let base64img = new Subject<any>();
+    await fetch('./../../assets/IMG_1891.jpg')
+    .then((res) => res.blob())
+    .then((blob) => {
+        // Read the Blob as DataURL using the FileReader API
+        const reader = this.getFileReader2()
+        reader.onloadend = () => {
+            const next = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
+            base64img.next(next);
+        };
+        reader.readAsDataURL(blob);
     });
+
+    base64img.subscribe((data) => {
+      console.log(data);
+      
+      this.documentReader.recognizeData(data).subscribe((m) => {
+        /* Converting the JSON string to a JSON object and then converting the JSON object to a
+        DocumentReaderCompletion object. */
+        data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
+        console.log(data,' document');
+        
+        if (data != undefined) {
+          let dataFields: any = {};
+  
+          const result = data?.textResult?.fields;
+          console.log(result);
+          const documentType = result.find(
+            (field: any) => field.fieldName == 'Document class code'
+          );
+          console.log(result);
+  
+         // if (documentType.value == 'P') {
+            result.map((field: any) => {
+              switch (field.fieldName) {
+                case 'Surname':
+                  dataFields['lastName'] = field.value;
+  
+                  break;
+                case 'Given name':
+                  dataFields['firstName'] = field.value;
+  
+                  break;
+                case 'Document number':
+                  dataFields['documentNumber'] = field.value;
+  
+                  break;
+                case 'Nationality code':
+                  dataFields['nationality'] = field.value;
+  
+                  break;
+                case 'Date of birth':
+                  dataFields['birthDate'] = field.value;
+  
+                  break;
+                case 'Sex':
+                  if (field.value == 'M') {
+                    dataFields['sex'] = 'MALE';
+                  } else if (field.value == 'F') {
+                    dataFields['sex'] = 'FEMALE';
+                  } else dataFields['sex'] = 'X';
+  
+                  break;
+                case 'Date of expiry':
+                  dataFields['expirationDate'] = field.value;
+  
+                  break;
+                case 'MRZ lines':
+                  dataFields['mrzLines'] = field.value.replaceAll('^', '\n');
+  
+                  break;
+                default:
+                  break;
+              }
+            });
+  
+            let dataObject = {
+              data: dataFields,
+              base64Img: data?.graphicResult?.fields
+                ? data.graphicResult.fields[0].value
+                : null,
+            };
+            /* A service that is used to pass data between pages. */
+            this.service.scannedData.next(dataObject);
+            /* Navigating to the document-details page. */
+            this.route.navigate(['document-details']);
+          //}
+        } else {
+          this.presentToast();
+        }
+      });
+    })
+  
   }
   async presentToast() {
     const toast = await this.toastController.create({

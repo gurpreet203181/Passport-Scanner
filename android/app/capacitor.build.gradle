@@ -16,6 +16,7 @@ dependencies {
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
     implementation project(':capacitor-status-bar')
+    implementation project(':jcesarmobile-ssl-skip')
 
 }
 apply from: "../../node_modules/@regulaforensics/cordova-plugin-document-reader-api/src/android/build.gradle"
