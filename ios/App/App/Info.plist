@@ -26,6 +26,11 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+<string>Is used to access your device's camera</string>
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Is used to save images to the gallery</string>
+
 	<key>NFCReaderUsageDescription</key>
 <string>NFC tag to read NDEF messages</string>
 <key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>

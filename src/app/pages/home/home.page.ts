@@ -90,12 +90,12 @@ export class HomePage implements OnInit {
         };
       }
     }
-
+     //out of zone file reader
      function getFileReader(): FileReader {
       const fileReader = new FileReader();
       const zoneOriginalInstance = (fileReader as any)["__zone_symbol__originalInstance"];
       return zoneOriginalInstance || fileReader;
-  }
+    }
   }
 
   async onInitialized() {
@@ -119,23 +119,8 @@ export class HomePage implements OnInit {
 
   async scanMRZCode() {
     let data: any;
-    let base64img = new Subject<any>();
-    await fetch('./../../assets/IMG_1891.jpg')
-    .then((res) => res.blob())
-    .then((blob) => {
-        // Read the Blob as DataURL using the FileReader API
-        const reader = this.getFileReader2()
-        reader.onloadend = () => {
-            const next = reader.result?.toString().replace('data:', '').replace(/^.+,/, '');
-            base64img.next(next);
-        };
-        reader.readAsDataURL(blob);
-    });
-
-    base64img.subscribe((data) => {
-      console.log(data);
-      
-      this.documentReader.recognizeData(data).subscribe((m) => {
+   
+      this.documentReader.showScanner().subscribe((m) => {
         /* Converting the JSON string to a JSON object and then converting the JSON object to a
         DocumentReaderCompletion object. */
         data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
@@ -151,8 +136,8 @@ export class HomePage implements OnInit {
           );
           console.log(result);
   
-         // if (documentType.value == 'P') {
-            result.map((field: any) => {
+        if (documentType.value == 'P') {
+            result.ForEach((field: any) => {
               switch (field.fieldName) {
                 case 'Surname':
                   dataFields['lastName'] = field.value;
@@ -205,11 +190,10 @@ export class HomePage implements OnInit {
             this.service.scannedData.next(dataObject);
             /* Navigating to the document-details page. */
             this.route.navigate(['document-details']);
-          //}
+          }
         } else {
           this.presentToast();
         }
-      });
     })
   
   }

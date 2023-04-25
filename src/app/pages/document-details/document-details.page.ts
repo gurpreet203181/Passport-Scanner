@@ -110,9 +110,7 @@ export class DocumentDetailsPage implements OnInit {
     try {
       this.documentReader.startRFIDReader().subscribe((m) => {
         const data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
-  
-        if (data?.rfidResult == 1) {
-          console.log(data);
+         if(data?.rfidSessionData?.status == 1){
           const filteredData = data?.textResult?.fields?.filter((field) => {
             switch (field.fieldName) {
               case 'Surname':
@@ -160,13 +158,14 @@ export class DocumentDetailsPage implements OnInit {
               : null,
             fields: filteredData,
           };
-  
+          
           this.updateSelection.emit(obj);
         }
+      
         //DocumentReader.stopRFIDReader()
       });
     } catch (error) {
-      this.error = error
+      console.log(error)
     }
     
   }
