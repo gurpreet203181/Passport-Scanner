@@ -32,7 +32,7 @@ export class DocumentDetailsPage implements OnInit {
   nfcTagData!: any;
   clipboardString: string = '';
   subscriptions!: Subscription;
-
+  error!:any ;
   @Output()
   updateSelection = new EventEmitter<any>();
   rfidData: any;
@@ -107,63 +107,68 @@ export class DocumentDetailsPage implements OnInit {
    * It opens the RFID reader and prints the data to the screen.
    */
   startRfidReader() {
-    this.documentReader.startRFIDReader().subscribe((m) => {
-      const data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
-
-      if (data?.rfidResult == 1) {
-        console.log(data);
-        const filteredData = data?.textResult?.fields?.filter((field) => {
-          switch (field.fieldName) {
-            case 'Surname':
-              return false;
-              break;
-            case 'Given name':
-              return false;
-              break;
-            case 'Document number':
-              return false;
-              break;
-            case 'Nationality':
-              return false;
-              break;
-            case 'Date of birth':
-              return false;
-              break;
-            case 'Sex':
-              return false;
-              break;
-            case 'Date of expiry':
-              return false;
-              break;
-            case 'MRZ lines':
-              return false;
-              break;
-            default:
-              //return true;
-              break;
-          }
-
-          switch (field.value) {
-            case '':
-              return false;
-              break;
-
-            default:
-              break;
-          }
-          return true;
-        });
-        const obj = {
-          base64Portrait: data?.graphicResult?.fields
-            ? data?.graphicResult?.fields[0].value
-            : null,
-          fields: filteredData,
-        };
-
-        this.updateSelection.emit(obj);
-      }
-      //DocumentReader.stopRFIDReader()
-    });
+    try {
+      this.documentReader.startRFIDReader().subscribe((m) => {
+        const data = DocumentReaderCompletion.fromJson(JSON.parse(m))?.results;
+  
+        if (data?.rfidResult == 1) {
+          console.log(data);
+          const filteredData = data?.textResult?.fields?.filter((field) => {
+            switch (field.fieldName) {
+              case 'Surname':
+                return false;
+                break;
+              case 'Given name':
+                return false;
+                break;
+              case 'Document number':
+                return false;
+                break;
+              case 'Nationality':
+                return false;
+                break;
+              case 'Date of birth':
+                return false;
+                break;
+              case 'Sex':
+                return false;
+                break;
+              case 'Date of expiry':
+                return false;
+                break;
+              case 'MRZ lines':
+                return false;
+                break;
+              default:
+                //return true;
+                break;
+            }
+  
+            switch (field.value) {
+              case '':
+                return false;
+                break;
+  
+              default:
+                break;
+            }
+            return true;
+          });
+          const obj = {
+            base64Portrait: data?.graphicResult?.fields
+              ? data?.graphicResult?.fields[0].value
+              : null,
+            fields: filteredData,
+          };
+  
+          this.updateSelection.emit(obj);
+        }
+        //DocumentReader.stopRFIDReader()
+      });
+    } catch (error) {
+      this.error = error
+    }
+    
   }
   async tryAgianRFIDReader() {
     this.openRFIDReader();
